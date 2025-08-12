@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual - Contabilidade Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Mono&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans Mono', monospace;
+            background: linear-gradient(to bottom right, #000000, #333333, #666666);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 0, 0.2);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 0, 0.2);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+        }
+        h1 {
+            font-family: 'Ubuntu Mono', monospace;
+            color: #ffff00;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+        }
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .section-header {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-family: 'Ubuntu Mono', monospace;
+            color: #ffff00;
+        }
+        .section-content {
+            padding: 20px;
+            display: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .section-content p {
+            margin-top: 0;
+            line-height: 1.6;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .modern-button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-family: 'Open Sans Mono', monospace;
+        }
+        .modern-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .modern-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .popup-content {
+            background: #000;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            width: 90%;
+            height: 90%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .popup-header h2 {
+            margin: 0;
+            color: #ffff00;
+            font-family: 'Ubuntu Mono', monospace;
+        }
+        .close-button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .close-button:hover {
+            background-color: #cc0000;
+        }
+        .popup-iframe {
+            flex-grow: 1;
+            border: none;
+            width: 100%;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MANUAL - CONTABILIDADE DIGITAL</h1>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                CONVIDAR CLIENTES CONTABILIDADE DIGITAL
+            </div>
+            <div class="section-content">
+                <p>Caso você queira, também poderá convidar seus clientes para aderirem a Contabilidade Digital e assim ter seus extratos bancários integrados com a Contabilidade:</p>
+                <div class="button-container">
+                    <button class="modern-button" onclick="openPopup('https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=10115&palavraChave=Como%20convidar%20clientes%20para%20Contabilidade%20Digital?&modulosSelecionados=0&intencaoID=0', 'Como convidar clientes para Contabilidade Digital?')">Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                CLIENTE ACEITANDO CONVITE DO CONTADOR
+            </div>
+            <div class="section-content">
+                <p>Confira abaixo como aceitar o convite enviado pelo escritório de contabilidade para utilizar a Contabilidade Digital e também como fazer o termo de consentimento para a integração com outros bancos. Siga os passos:</p>
+                <div class="button-container">
+                    <button class="modern-button" onclick="openPopup('https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=11336&palavraChave=Como%20aceitar%20convite%20Contabilidade%20Digital%20e%20fazer%20os%20consentimentos?&modulosSelecionados=0&intencaoID=0', 'Como aceitar convite Contabilidade Digital e fazer os consentimentos?')">Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                CLIENTE REALIZANDO O CONSENTIMENTO DA CONTABILIDADE DIGITAL
+            </div>
+            <div class="section-content">
+                <p>Para integrar o extrato bancário dos principais bancos via Contabilidade Digital é necessário fazer o consentimento, conforme abaixo:</p>
+                <p>Quais financeiras estão disponíveis para o termo de consentimento (Open Finance)?</p>
+                <p>Atualmente é possível realizar o processo de integração com os seguintes bancos:</p>
+                <ul>
+                    <li>Banco do Brasil</li>
+                    <li>Banrisul</li>
+                    <li>Bradesco</li>
+                    <li>Caixa</li>
+                    <li>Itaú</li>
+                    <li>Nubank</li>
+                    <li>Banco Santander</li>
+                    <li>Sicoob</li>
+                    <li>Sicredi</li>
+                    <li>Unicred</li>
+                </ul>
+                <div class="button-container">
+                    <button class="modern-button" onclick="openPopup('https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=11135&palavraChave=Fazer%20consentimento%20Contabilidade%20Digital%20(Open%20Finance)&modulosSelecionados=0&intencaoID=0', 'Fazer consentimento Contabilidade Digital (Open Finance)')">Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                FUNCIONALIDADES DO APP DO CLIENTE
+            </div>
+            <div class="section-content">
+                <p>Veja abaixo as principais funcionalidades do APP Domínio Empresa</p>
+                <div class="button-container">
+                    <button class="modern-button" onclick="openPopup('https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=11037&palavraChave=Quais%20as%20funcionalidades%20do%20APP%20Dom%C3%ADnio%20Empresa&modulosSelecionados=0&intencaoID=0', 'Quais as funcionalidades do APP Domínio Empresa')">Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                CONFIGURAR SISTEMA PARA RECEBER OS LANÇAMENTOS DO EXTRATO DO CLIENTE
+            </div>
+            <div class="section-content">
+                <p>Informações Complementares</p>
+                <ul>
+                    <li>Todas as movimentações poderão ser vistas clicando no ícone da Contabilidade Digital, incluindo o Saldo Bancário Final e o Saldo Contábil Final;</li>
+                    <li>A coluna Filial somente ficará habilitada quando estiver centralizado entre matriz e filial. Com isso poderá ser incluído uma conta contábil para cada empresa;</li>
+                    <li>A baixa automática do contas a pagar e receber será realizada tendo como base a inscrição do Cliente/Fornecedor, Data de Vencimento e Valor. Caso existir mais de um título com mesmo valor e data de vencimento, então a baixa automática não será realizada, sendo necessário avaliar e indicar qual deve ser gravada manualmente (Possuímos uma dica exclusiva, mostrando todas essas considerações, clique aqui e saiba mais).</li>
+                </ul>
+                <div class="button-container">
+                    <button class="modern-button" onclick="openPopup('https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=9028&palavraChave=Como%20configurar%20integra%C3%A7%C3%A3o%20extrato%20banc%C3%A1rio%20Contabilidade%20Digital&modulosSelecionados=0&intencaoID=0', 'Como configurar integração extrato bancário Contabilidade Digital')">Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                CONFIGURAR PARA O SISTEMA IDENTIFICAR AS CONTAS AUTOMATICAMENTE AO IMPORTAR O EXTRATO
+            </div>
+            <div class="section-content">
+                <p>Esta configuração é necessária somente em situações específicas. Quando o extrato é importado com os dados, o sistema verifica os cadastros de clientes e funcionários em outros módulos e aplica as contas já configuradas, salvando-as automaticamente nas configurações.</p>
+                <div class="button-container">
+                    <button class="modern-button" onclick="openPopup('https://suporte.dominioatendimento.com/central/faces/solucao.html?codigo=9029&palavraChave=Como%20configurar%20contabiliza%C3%A7%C3%A3o%20Extrato%20Banc%C3%A1rio%20Contabilidade%20Digital&modulosSelecionados=0&intencaoID=0', 'Como configurar contabilização Extrato Bancário Contabilidade Digital')">Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 id="popupTitle"></h2>
+                <button class="close-button" onclick="closePopup()">X</button>
+            </div>
+            <iframe id="popupIframe" class="popup-iframe" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        function openPopup(url, title) {
+            document.getElementById('popupTitle').innerText = title;
+            document.getElementById('popupIframe').src = url;
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('popupIframe').src = ''; // Clear iframe content
+        }
+    </script>
+</body>
+</html>
+
